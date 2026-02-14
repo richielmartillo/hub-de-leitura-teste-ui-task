@@ -31,3 +31,4 @@ Cypress.Commands.add('login', (email, senha) => {
     cy.url().should('include', 'dashboard')
  })
 
+ 

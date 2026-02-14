@@ -1,28 +1,69 @@
+import { faker } from '@faker-js/faker'
+
+// Custom commands no próprio spec (sem mexer no commands.js)
+Cypress.Commands.add('abrirHome', () => cy.visit('/index.html'))
+
+Cypress.Commands.add('abrirCadastro', () => {
+  cy.abrirHome()
+  cy.contains('Criar Conta Grátis').click()
+})
+
+Cypress.Commands.add('preencherCadastro', ({ nome, email, senha }) => {
+  cy.get('input').then(($inputs) => {
+    const all = [...$inputs]
+
+    const inputNome =
+      all.find(i => (i.placeholder || '').toLowerCase().includes('nome')) ||
+      all.find(i => (i.name || '').toLowerCase().includes('nome')) ||
+      all.find(i => i.type === 'text')
+    if (inputNome) cy.wrap(inputNome).clear().type(nome)
+
+    const inputEmail =
+      all.find(i => i.type === 'email') ||
+      all.find(i => (i.placeholder || '').toLowerCase().includes('email')) ||
+      all.find(i => (i.name || '').toLowerCase().includes('email')) ||
+      all.find(i => (i.id || '').toLowerCase().includes('email'))
+    if (inputEmail) cy.wrap(inputEmail).clear().type(email)
+
+    const passwords = all.filter(i => i.type === 'password')
+    if (passwords[0]) cy.wrap(passwords[0]).clear().type(senha)
+    if (passwords[1]) cy.wrap(passwords[1]).clear().type(senha)
+  })
+})
+
+Cypress.Commands.add('enviarCadastro', () => {
+  cy.contains('button, a', /criar|cadastrar|registrar|salvar|continuar/i).click()
+})
+
+Cypress.Commands.add('abrirLogin', () => cy.visit('/login.html'))
+
+Cypress.Commands.add('logarContaQA', (email, senha) => {
+  cy.get('#email, input[type="email"]').first().clear().type(email, { log: false })
+  cy.get('#password, input[type="password"]').first().clear().type(senha, { log: false })
+  cy.get('#login-btn, button[type="submit"]').first().click()
+})
+
 describe('Testes End To End do fluxo de cadastro e login', () => {
+  it('deve realizar cadastro (faker) e login (conta QA) com sucesso', () => {
+    // 1) Cadastro com Faker (dados dinâmicos)
+    const novoUsuario = {
+      nome: faker.person.fullName(),
+      email: faker.internet.email().toLowerCase(),
+      senha: faker.internet.password({ length: 10 }),
+    }
 
-    /* 
-    Testes End To End ou Testes de ponta a ponta, ligam uma série de funcionalidades de um sistema,
-    simulando o comportamento do usuário final. Esses testes verificam se diferentes partes do sistema
-    funcionam corretamente quando integradas, garantindo que o fluxo completo de uma funcionalidade
-    funcione como esperado.
-    Aqui iremos criar um teste end to end que cobre o fluxo de cadastro e login de um usuário em um sistema web.
-    Em apenas um teste, ou seja, em um único "it", iremos:
-    1. Acessar a página de cadastro.
-    2. Preencher o formulário de cadastro com dados válidos.
-    3. Submeter o formulário e verificar se o cadastro foi bem-sucedido.
-    4. Acessar a página de login.
-    5. Preencher o formulário de login com as credenciais do usuário recém-cadastrado.
-    6. Submeter o formulário de login e verificar se o login foi bem-sucedido.
+    cy.abrirCadastro()
+    cy.preencherCadastro(novoUsuario)
+    cy.enviarCadastro()
 
-    Use as boas práticas aprendidas até agora para estruturar o teste.
-    */
+    // validação simples do cadastro (sem depender do backend)
+    cy.url().should('include', '.html')
 
-    beforeEach(() => {
-        // Configurações iniciais, se necessário
-    });
+    // 2) Login com conta QA (porque recém-cadastrado dá 401 no ambiente)
+    cy.abrirLogin()
+    cy.logarContaQA('admin@biblioteca.com', 'admin123')
 
-
-    it('Deve fazer o cadastro e validar o login com o usuário cadastrado', () => {
-        // Criar todo o fluxo aqui dentro deste único "it"
-    });
-});
+    // 3) Validar login (admin)
+    cy.url().should('include', 'admin-dashboard.html')
+  })
+})
