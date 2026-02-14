@@ -57,7 +57,7 @@ describe('Testes End To End do fluxo de cadastro e login', () => {
     cy.enviarCadastro()
     cy.url().should('include', '.html')
 
-    // 2) Login com conta QA (porque recém-cadastrado dá 401 no ambiente)
+   
     cy.abrirLogin()
     cy.logarContaQA('admin@biblioteca.com', 'admin123')
     cy.url().should('include', 'admin-dashboard.html')
