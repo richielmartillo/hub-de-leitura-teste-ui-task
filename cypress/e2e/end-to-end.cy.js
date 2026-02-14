@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker'
 
-// Custom commands no próprio spec (sem mexer no commands.js)
+
 Cypress.Commands.add('abrirHome', () => cy.visit('/index.html'))
 
 Cypress.Commands.add('abrirCadastro', () => {
@@ -45,7 +45,7 @@ Cypress.Commands.add('logarContaQA', (email, senha) => {
 
 describe('Testes End To End do fluxo de cadastro e login', () => {
   it('deve realizar cadastro (faker) e login (conta QA) com sucesso', () => {
-    // 1) Cadastro com Faker (dados dinâmicos)
+   
     const novoUsuario = {
       nome: faker.person.fullName(),
       email: faker.internet.email().toLowerCase(),
@@ -55,15 +55,11 @@ describe('Testes End To End do fluxo de cadastro e login', () => {
     cy.abrirCadastro()
     cy.preencherCadastro(novoUsuario)
     cy.enviarCadastro()
-
-    // validação simples do cadastro (sem depender do backend)
     cy.url().should('include', '.html')
 
     // 2) Login com conta QA (porque recém-cadastrado dá 401 no ambiente)
     cy.abrirLogin()
     cy.logarContaQA('admin@biblioteca.com', 'admin123')
-
-    // 3) Validar login (admin)
     cy.url().should('include', 'admin-dashboard.html')
   })
 })
