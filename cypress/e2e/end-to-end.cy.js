@@ -8,6 +8,7 @@ Cypress.Commands.add('abrirCadastro', () => {
   cy.contains('Criar Conta Grátis').click()
 })
 
+
 Cypress.Commands.add('preencherCadastro', ({ nome, email, senha }) => {
   cy.get('input').then(($inputs) => {
     const all = [...$inputs]
@@ -63,3 +64,4 @@ describe('Testes End To End do fluxo de cadastro e login', () => {
     cy.url().should('include', 'admin-dashboard.html')
   })
 })
+
