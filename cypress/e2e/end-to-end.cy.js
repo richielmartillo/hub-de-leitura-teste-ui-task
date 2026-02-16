@@ -41,9 +41,15 @@ Cypress.Commands.add('enviarCadastro', () => {
 Cypress.Commands.add('abrirLogin', () => cy.visit('/login.html'))
 
 Cypress.Commands.add('logarContaQA', (email, senha) => {
+
+  //Evita 404 do endpoint /api/admin/users (não è foco do teste de login)
+  cy.intercept('GET', '/api/admin/users', { statusCode: 200, body: [] }).as('adminUsers')
+
   cy.get('#email, input[type="email"]').first().clear().type(email, { log: false })
   cy.get('#password, input[type="password"]').first().clear().type(senha, { log: false })
   cy.get('#login-btn, button[type="submit"]').first().click()
+
+  cy.wait('@adminUsers')
 })
 
 describe('Testes End To End do fluxo de cadastro e login', () => {
