@@ -6,15 +6,16 @@ beforeEach(() => {
 
 describe('', () => {
     it('Deve fazer cadastro com sucesso', () => {
+        let  email = `funcJs-${Date.now()}-@numAleatorio.com` 
+
         cy.get('#name').type('Juanfri')
-        cy.get('#email').type('juanfri0@gmail.com')
+        cy.get('#email').type(email)
         cy.get('#phone').type('116865332568')
         cy.get('#password').type('456teste#$%¨*#GGER#S')
         cy.get('#confirm-password').type('456teste#$%¨*#GGER#S')
         cy.get('#terms-agreement').check()
         cy.get('#register-btn').click()
-   
-
+   //resultado esperado
         cy.url().should('include', 'dashboard')
     });
 });
