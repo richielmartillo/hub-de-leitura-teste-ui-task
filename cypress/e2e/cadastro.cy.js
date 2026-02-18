@@ -37,4 +37,40 @@ describe('', () => {
     cy.url().should('include', 'dashboard')
     cy.get('#user-name').should('contain', nome)
   })
+
+
+
+   it('Deve fazer cadastro com sucesso usando usuario2 fixture', () => {
+   cy.fixture('usuario2').then((user) => {
+    const emailUnico = `user2-${Date.now()}@teste.com`
+
+    cy.get('#name').type('Franco')
+    cy.get('#email').type(emailUnico)        
+    cy.get('#phone').type('116865332568')
+
+    cy.get('#password').type(user.senha)     
+    cy.get('#confirm-password').type(user.senha)
+
+    cy.get('#terms-agreement').check()
+    cy.get('#register-btn').click()
+
+    // ✅ validación 
+    cy.url().should('include', 'dashboard.html')
+    
+    cy.contains('Franco').should('be.visible')
+    cy.contains('Hub de Leitura').should('be.visible')
+
+  })
+})
+
+
+
+it('Deve preencher cadastro com sucesso - Usando comando customizado', () => {
+  let email = `funcJs-${Date.now()}-@numAleatorio.com`
+  let nome = faker.person.fullName({sex: 'male'})
+  cy.preencherCadastro(
+    nome, email, '542654868654556', 'teste123', 'teste123' 
+  )
+   cy.url().should('include', 'dashboard')
+});
 })
