@@ -1,8 +1,7 @@
 /// <reference types="cypress"/>
 
 import user from "../fixtures/usuario.json"
-//const email = 'usuario@teste.com'
-//const senha = 'user123'
+
 
 describe('Funcionalidade: Login', () => {
   

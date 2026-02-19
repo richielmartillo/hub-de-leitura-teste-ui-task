@@ -24,11 +24,15 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
-Cypress.Commands.add('login', (email, senha) => { 
-    cy.get('#email').type(email, {log: false})
-    cy.get('#password').type(senha, {log: false})
-    cy.get('#login-btn').click()
-   // cy.url().should('include', 'dashboard')
+Cypress.Commands.add('login', (email, senha) => {
+  cy.visit('login.html')
+  cy.url().should('include', 'login.html')
+
+  cy.get('#email').type(email, { log: false })
+  cy.get('#password').type(senha, { log: false })
+  cy.get('#login-btn').click()
+
+
  })
 
  Cypress.Commands.add('preencherCadastro', (nome, email, telefone, senha, confirmarSenha) =>{
@@ -40,6 +44,6 @@ Cypress.Commands.add('login', (email, senha) => {
     cy.get('#confirm-password').type(confirmarSenha)
     cy.get('#terms-agreement').check()
     cy.get('#register-btn').click()
- //   cy.url().should('include', 'dashboard')
+ 
  
 })
