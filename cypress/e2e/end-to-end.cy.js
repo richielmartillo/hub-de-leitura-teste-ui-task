@@ -11,10 +11,10 @@ beforeEach(() => {
 })
 
   it('Deve cadastrar e logar com o usuario recém-cadastrado', () => {
-    let email = `funcJs-${Date.now()}-@numAleatorio.com`
-    let nome = faker.person.fullName({sex: 'male'})
-    let telefone = '542654868654556'
-    let senha = 'teste123'
+    const email = `funcJs-${Date.now()}-@numAleatorio.com`
+    const nome = faker.person.fullName({sex: 'male'})
+    const telefone = '542654868654556'
+    const senha = 'teste123'
 
     cadastroPage.preencherCadastro(nome, email, telefone, senha, senha)
    
