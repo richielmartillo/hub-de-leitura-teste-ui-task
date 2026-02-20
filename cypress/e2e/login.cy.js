@@ -6,10 +6,10 @@ import user from "../fixtures/usuario.json"
 describe('Funcionalidade: Login', () => {
   
   beforeEach(() => {
-    cy.visit('login.html')
+    LoginPag.visitarPaginaLogin()
   })
 
-  it('Deve fazer login com sucesso', () => {
+  it.only('Deve fazer login com sucesso', () => {
   cy.get('#email').type('usuario@teste.com')
   cy.get('#password').type('user123')
   cy.get('#login-btn').click()
@@ -24,10 +24,12 @@ describe('Funcionalidade: Login', () => {
     cy.login('adminbiblioteca.com', 'admin123')
   });
 
-  it.only('Deve fazer login com sucesso - Usando importação da massa de dados', () => {
+  it('Deve fazer login com sucesso - Usando importação da massa de dados', () => {
   cy.login(user.email, user.senha)    
 
-  
+  //it.only('Deve fazer login com sucesso usando page objects', () => {
+    
+//  });
 
 });
   });
