@@ -1,11 +1,18 @@
 /// <reference types="cypress"/>
 import { faker } from '@faker-js/faker'
 import cadastroPage from '../support/pages/cadastro-page';
+
+describe('Funcionalidade: Cadastro ', () => {
+
 beforeEach(() => {
   cadastroPage.visitarPaginaCadastro()
-})
- 
-describe('Funcionalidade: Cadastro ', () => {
+});
+
+afterEach(() => {
+  cy.screenshot()
+});
+
+
   it('Deve fazer cadastro com sucesso, usando função JS', () => {
     let email = `funcJs-${Date.now()}-@numAleatorio.com`
 
